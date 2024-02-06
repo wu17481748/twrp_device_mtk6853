@@ -1,4 +1,4 @@
-# android_device_realme_RMX2173
+# android_device_OPPO_OP4E21
 For building TWRP for OPPO A72
 
 ## Features
