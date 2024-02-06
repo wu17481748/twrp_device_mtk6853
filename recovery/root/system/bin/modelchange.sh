@@ -18,24 +18,31 @@ else
       
       if [ "$device" ]; then
         echo "change device"
-        sed -i "s/=RMX2173/=${device}/" /prop.default
-        sed -i "s/=RMX2173/=${device}/" /default.prop
+        sed -i "s/=OP4E21/=${device}/" /prop.default
+        sed -i "s/=OP4E21/=${device}/" /default.prop
         sed -i "$ a ro.product.device=${device}" /prop.default
       else
         echo "pass change device"
-        sed -i "s/=RMX2173/=RMX2175CN/" /prop.default
-        sed -i "s/=RMX2173/=RMX2175CN/" /default.prop
-        sed -i "$ a ro.product.device=RMX2175CN" /prop.default
+        sed -i "s/=OP4E21/=OP4E21/" /prop.default
+        sed -i "s/=OP4E21/=OP4E21/" /default.prop
+        sed -i "$ a ro.product.device=OP4E21" /prop.default
       fi
       
-      if [ "$product" ]; then
+      if [ "$product" = "PDYT20" ]; then
         echo "change product"
-        sed -i "s/RMX2173/${product}/" /prop.default
-        sed -i "s/RMX2173/${product}/" /default.prop
-        sed -i "$ a ro.product.name=omni_${product}" /prop.default
+        sed -i "s/PDYT20/${product}/" /prop.default
+        sed -i "s/PDYT20/${product}/" /default.prop
+        sed -i "$ a ro.product.name=twrp_${product}" /prop.default
+        
+      elif [ "$product" = "PDYM20" ]; then
+        echo "change product"
+        sed -i "s/PDYM20/${product}/" /prop.default
+        sed -i "s/PDYM20/${product}/" /default.prop
+        sed -i "$ a ro.product.name=twrp_${product}" /prop.default
+      
       else
         echo "pass change product"
-        sed -i "$ a ro.product.name=omni_RMX2173" /prop.default
+        sed -i "$ a ro.product.name=twrp_OP4E21" /prop.default
       fi
       
       if [ "$soft" ]; then
@@ -43,17 +50,17 @@ else
         sed -i "$ a ro.separate.soft=${soft}" /prop.default
       else
         echo "pass change soft"
-        sed -i "$ a ro.separate.soft=20633" /prop.default
+        sed -i "$ a ro.separate.soft=20002" /prop.default
       fi
       
       if [ "$name" ]; then
         echo "change name"
-        sed -i "s/Q2 Pro 5G/${name}/" /prop.default
-        sed -i "s/Q2 Pro 5G/${name}/" /default.prop
+        sed -i "s/OPPO A72 5G/${name}/" /prop.default
+        sed -i "s/OPPO A72 5G/${name}/" /default.prop
         sed -i "$ a ro.product.model=${name}" /prop.default
       else
         echo "pass change name"
-        sed -i "$ a ro.product.model=Q2 Pro 5G" /prop.default
+        sed -i "$ a ro.product.model=OPPO A72 5G" /prop.default
       fi
       
       resetprop --file /prop.default
