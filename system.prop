@@ -1,5 +1,6 @@
 ro.adb.secure=0
-ro.product.locale=zh_CN
+ro.crypto.uses_fs_ioc_add_encryption_key=true
+ro.crypto.volume.filenames_mode=aes-256-cts
 ro.commonsoft.ota=OP4E21
 ro.product.product.device=OP4E21
 ro.product.device=OP4E21
