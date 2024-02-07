@@ -1,4 +1,5 @@
 #!/system/bin/sh
+sleep 4
 i=0
   while [ $i -le 6 ]; do
     let i++
