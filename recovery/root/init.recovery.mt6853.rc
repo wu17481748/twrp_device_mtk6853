@@ -42,7 +42,7 @@ service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
     seclabel u:r:recovery:s0
 
 # Start Daemon (Registry directories should already be present)
-service mobicore /system/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry \
+service mobicore /system/bin/mcDriverDaemon --sfs-reformat --P1 /mnt/vendor/persist/mcRegistry \
     -r /vendor/app/mcRegistry/020f0000000000000000000000000000.drbin \
     -r /vendor/app/mcRegistry/05120000000000000000000000000000.drbin \
     -r /vendor/app/mcRegistry/40188311faf343488db888ad39496f9a.drbin \
@@ -67,15 +67,15 @@ service mobicore /system/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry 
 service modelchange /system/bin/sh /system/bin/modelchange.sh
     user root
     group root
-    seclabel u:r:shell:s0
-    oneshot
-on property:sys.boot_completed=1
-    start modelchange
+    disabled
+    seclabel u:r:recovery:s0
+    oneshot    
        
 on property:hwservicemanager.ready=true
     start mobicore
     start keymaster-4-1
     start gatekeeper-1-0
+    start modelchange
 
 on property:ro.crypto.state=unsupported
     stop mobicore
