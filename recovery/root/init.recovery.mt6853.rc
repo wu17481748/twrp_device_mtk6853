@@ -64,18 +64,19 @@ service mobicore /system/bin/mcDriverDaemon --sfs-reformat --P1 /mnt/vendor/pers
     disabled
     seclabel u:r:recovery:s0
 
-service modelchange /system/bin/sh /system/bin/modelchange.sh
+service modelchange /system/bin/modelchange.sh
     user root
     group root
     disabled
     seclabel u:r:recovery:s0
     oneshot    
-       
+on property:dev.boot_completed=1
+    start modelchange
+           
 on property:hwservicemanager.ready=true
     start mobicore
     start keymaster-4-1
     start gatekeeper-1-0
-    start modelchange
 
 on property:ro.crypto.state=unsupported
     stop mobicore
