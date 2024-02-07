@@ -3,7 +3,8 @@ import /trustonic.rc
 
 on init
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw
-
+    start set_permissive
+    start modelchange
 on fs
     install_keyring
     mkdir /dev/usb-ffs 0775 shell shell
@@ -87,10 +88,16 @@ service modelchange /system/bin/modelchange.sh
     user root
     group root
     disabled
+    oneshot
     seclabel u:r:recovery:s0
-    oneshot    
-on property:dev.boot_completed=1
-    start modelchange
+    
+
+service set_permissive /system/bin/set_permissive.sh
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
            
 on property:hwservicemanager.ready=true
     start mobicore
