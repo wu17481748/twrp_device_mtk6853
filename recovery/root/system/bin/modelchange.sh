@@ -52,7 +52,7 @@
         sed -i "s/^.*ro.product.model.*$/$model1/" /prop.default
       fi
       
-      resetprop -f /prop.default
-      resetprop -f /default.prop
+      resetprop --file /prop.default
+      resetprop --file /default.prop
     fi
   done
