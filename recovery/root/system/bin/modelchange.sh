@@ -49,16 +49,10 @@
       
       if [ "$model" ]; then
         echo "change model"
-        sed -i "s/^.*ro.product.model.*$/$names1/" /prop.default
+        sed -i "s/^.*ro.product.model.*$/$model1/" /prop.default
       fi
       
-      resetprop --file /prop.default
-      resetprop --file /default.prop
-      break
-    else
-      sleep 1
-      let i++
+      resetprop -f /prop.default
+      resetprop -f /default.prop
     fi
   done
-
-stop modelchange
