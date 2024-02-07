@@ -1,6 +1,8 @@
 #!/system/bin/sh
-  i=1
-  while [ $i -le 10 ]; do
+i=0
+  while [ $i -le 6 ]; do
+    let i++
+    sleep 1
     if [ -f /cache/runtime.prop ]; then
       config_conf="$(cat "/cache/runtime.prop" | egrep -v '^#')"
       product="$(echo "$config_conf" | egrep '^ro.build.product=' | sed -n 's/ro.build.product=//g;$p')"
