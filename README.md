@@ -29,10 +29,10 @@ Finally execute these:
 ```
 export ALLOW_MISSING_DEPENDENCIES=true
 . build/envsetup.sh
-lunch twrp_OP4E21-eng
+lunch twrp_mtk6853-eng
 mka -j$(nproc --all) recoveryimage
 
 |or|
 
-export ALLOW_MISSING_DEPENDENCIES=true; source build/envsetup.sh; lunch twrp_OP4E21-eng; mka -j$(nproc --all) recoveryimage
+export ALLOW_MISSING_DEPENDENCIES=true; source build/envsetup.sh; lunch twrp_mtk6853-eng; mka -j$(nproc --all) recoveryimage
 ```
