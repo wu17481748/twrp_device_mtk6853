@@ -1,5 +1,5 @@
 # android_device_mtk6853
-构建适用 TWRP for OPPO-Realme  mtk6853通用TWRP
+构建适用 OPPO-Realme  mtk6853处理器通用TWRP
 
 ## Features
 
