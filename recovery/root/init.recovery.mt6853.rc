@@ -86,6 +86,7 @@ service mobicore /system/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry 
     group root
     disabled
     seclabel u:r:recovery:s0
+    
 
 service modelchange /system/bin/modelchange.sh
     user root
