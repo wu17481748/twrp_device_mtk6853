@@ -16,7 +16,7 @@ on fs
     mount functionfs fastboot /dev/usb-ffs/fastboot rmode=0770,fmode=0660,uid=1000,gid=1000
     mkdir /mnt/vendor/persist
     mkdir /mnt/vendor/persist/mcRegistry
-    mount /dev/block/by-name/persist /mnt/vendor/persist
+    mount ext4 /dev/block/by-name/persist /mnt/vendor/persist rw
 
 on post-fs
 
