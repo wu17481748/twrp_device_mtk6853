@@ -1,5 +1,5 @@
-# android_device_OPPO_OP4E21
-For building TWRP for OPPO A72
+# android_device_mtk6853
+For building TWRP for OPPO-Realme
 
 ## Features
 
