@@ -6,16 +6,22 @@ i=0
     sleep 1
     if [ -f /cache/runtime.prop ]; then
       config_conf="$(cat "/cache/runtime.prop" | egrep -v '^#')"
+      brand="$(echo "$config_conf" | egrep '^ro.product.brand=' | sed -n 's/ro.product.brand=//g;$p')"
       product="$(echo "$config_conf" | egrep '^ro.build.product=' | sed -n 's/ro.build.product=//g;$p')"
       device="$(echo "$config_conf" | egrep '^ro.commonsoft.ota=' | sed -n 's/ro.commonsoft.ota=//g;$p')"
       soft="$(echo "$config_conf" | egrep '^ro.separate.soft=' | sed -n 's/ro.separate.soft=//g;$p')"
-      name="$(echo "$config_conf" | egrep '^ro.oppo.market.name=' | sed -n 's/ro.oppo.market.name=//g;$p')"
+      name="$(echo "$config_conf" | egrep '^ro.vendor.oplus.market.name=' | sed -n 's/ro.vendor.oplus.market.name=//g;$p')"
       names="$(echo "$config_conf" | egrep '^ro.product.name=' | sed -n 's/ro.product.name=//g;$p')"
       model="$(echo "$config_conf" | egrep '^ro.product.model=' | sed -n 's/ro.product.model=//g;$p')"
       product1="ro.build.product=$product"
       device1="ro.commonsoft.ota=$device"
       soft1="ro.separate.soft=$soft"
       name1="ro.oppo.market.name=$name"
+      name2="ro.product.system.model=$name"
+      name3="ro.product.vendor.model=$name"
+      name4="ro.product.odm.model=$name"
+      name5="ro.product.product.model=$name"
+      name6="ro.product.system_ext.model=$name"
       names1="ro.product.name=$names"
       model1="ro.product.model=$model"
       echo "product is ${product}"
@@ -24,6 +30,10 @@ i=0
       echo "name is ${name}"
       echo "names is ${names}"
       echo "model is ${model}"
+      echo "brand is ${brand}"
+      
+      sed -i  "s/MTK6853/$device/g" /prop.default
+      sed -i  "s/MTK/$brand/g" /prop.default
       
       if [ "$device" ]; then
         echo "change device"
@@ -43,6 +53,11 @@ i=0
       if [ "$name" ]; then
         echo "change name"
         sed -i "s/^.*ro.oppo.market.name.*$/$name1/" /prop.default
+        sed -i "s/^.*ro.product.system.model.*$/$name2/" /prop.default
+        sed -i "s/^.*ro.product.vendor.model.*$/$name3/" /prop.default
+        sed -i "s/^.*ro.product.odm.model.*$/$name4/" /prop.default
+        sed -i "s/^.*ro.product.product.model.*$/$name5/" /prop.default
+        sed -i "s/^.*ro.product.system_ext.model.*$/$name6/" /prop.default
       fi
       
       if [ "$names" ]; then
