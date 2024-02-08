@@ -15,4 +15,4 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/twrp_OP4E21.mk
+    $(LOCAL_DIR)/twrp_MTK6853.mk
