@@ -1,5 +1,4 @@
 import /tee.rc
-import /trustonic.rc
 
 on init
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw
