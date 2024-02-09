@@ -13,9 +13,6 @@ on fs
     mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
     mkdir /dev/usb-ffs/fastboot 0770 system system
     mount functionfs fastboot /dev/usb-ffs/fastboot rmode=0770,fmode=0660,uid=1000,gid=1000
-    mkdir /mnt/vendor/persist
-    mkdir /mnt/vendor/persist/mcRegistry
-    mount ext4 /dev/block/by-name/persist /mnt/vendor/persist rw
 
 on post-fs
 
