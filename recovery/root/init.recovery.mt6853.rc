@@ -2,6 +2,9 @@ import /tee.rc
 
 on init
     export LD_LIBRARY_PATH /system/lib64:/system/hw:/vendor/lib64:/vendor/lib64/hw
+    start servicemanager
+    start hwservicemanager
+    start vndservicemanager
     start set_permissive
     start modelchange
 on fs
@@ -40,6 +43,24 @@ service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
     group root
     disabled
     seclabel u:r:recovery:s0
+
+service servicemanager /system/bin/servicemanager
+    disabled
+    user root
+    seclabel u:r:recovery:s0
+
+service hwservicemanager /system/bin/hwservicemanager
+    disabled
+    user root
+    onrestart setprop hwservicemanager.ready false
+    writepid /dev/cpuset/system-background/tasks
+    seclabel u:r:recovery:s0
+
+service vndservicemanager /system/bin/vndservicemanager /dev/vndbinder
+    user root
+    writepid /dev/cpuset/system-background/tasks
+    seclabel u:r:recovery:s0
+
 
 # Start Daemon (Registry directories should already be present)
 service mobicore /system/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry \
