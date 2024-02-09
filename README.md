@@ -1,16 +1,17 @@
 # android_device_mtk6853
 构建适用 OPPO-Realme  mtk6853处理器通用TWRP
 
-## Features
+## 特征
 
-Works:
+工作情况:
 
-- ADB
-- Decryption of /data
-- Screen brightness settings
-- Vibration on touch
+- adb
+- fastbootd
+- 部分 /data 解密
+- 亮度
+- 触摸
 
-## Compile
+## 编译
 
 First checkout minimal twrp with omnirom tree:
 
