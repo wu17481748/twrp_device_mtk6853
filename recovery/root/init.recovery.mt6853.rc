@@ -15,6 +15,7 @@ on init
     symlink /mnt/vendor/persist /vendor/persist
     start set_permissive
     start modelchange
+    start hwservicemanager
     
 on fs
 
@@ -47,7 +48,22 @@ service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
     disabled
     seclabel u:r:recovery:s0
 
+on post-fs-data
+    mkdir /data/vendor_de 0770 system system
+    mkdir /data/vendor_de/0 0770 system system
+    mkdir /data/vendor_de/0/cryptoeng 0770 system system
+    chown system system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    restorecon /mnt/vendor/persist
+    mkdir /mnt/vendor/persist/mcRegistry 0771 system system
+    write /proc/bootprof "MOBICORE: Starting mcDriverDaemon"
 
+service hwservicemanager /system/bin/hwservicemanager
+    disabled
+    user root
+    onrestart setprop hwservicemanager.ready false
+    writepid /dev/cpuset/system-background/tasks
+    seclabel u:r:recovery:s0
 
 
 # Start Daemon (Registry directories should already be present)
@@ -128,15 +144,6 @@ on property:twrp.decrypt.done=true
     stop keymaster-4-1
     stop gatekeeper-1-0
 
-on post-fs-data
-    mkdir /data/vendor_de 0770 system system
-    mkdir /data/vendor_de/0 0770 system system
-    mkdir /data/vendor_de/0/cryptoeng 0770 system system
-    chown system system /mnt/vendor/persist
-    chmod 0771 /mnt/vendor/persist
-    restorecon /mnt/vendor/persist
-    mkdir /mnt/vendor/persist/mcRegistry 0771 system system
-    write /proc/bootprof "MOBICORE: Starting mcDriverDaemon"
 
 on boot
     start health-hal-2-1
