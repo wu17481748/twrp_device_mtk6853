@@ -1,13 +1,30 @@
 import /tee.rc
+on early-init
+    mkdir /vendor/firmware_mnt
+    symlink /vendor/firmware_mnt /firmware
+    mkdir /mnt/vendor
+    mkdir /mnt/vendor/persist
+    chown root system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    symlink /mnt/vendor/persist /persist
 
 on init
     export LD_LIBRARY_PATH /system/lib64:/system/hw:/vendor/lib64:/vendor/lib64/hw
+    mount ext4 /dev/block/platform/bootdevice/by-name/cust /oem ro barrier=1 discard
+    mount ext4 /dev/block/platform/bootdevice/by-name/persist /mnt/vendor/persist ro barrier=1 discard
+    mkdir /mnt/vendor/persist 0771 system system
+    mkdir /mnt/system
+    symlink /mnt/vendor/persist /vendor/persist
+    symlink /system/lib64/hw/libMcGatekeeper.so   /system/lib64/hw/gatekeeper.mt6853.so
+    symlink /system/lib64/hw/libMcGatekeeper.so   /system/lib64/hw/gatekeeper.k6853v1_64_6360.so
+    start set_permissive
+    start modelchange
     start servicemanager
     start hwservicemanager
     start vndservicemanager
-    start set_permissive
-    start modelchange
+    
 on fs
+
     install_keyring
     mkdir /dev/usb-ffs 0775 shell shell
     mkdir /dev/usb-ffs/adb 0770 shell shell
@@ -19,12 +36,37 @@ on fs
 
 on post-fs
 
-service keystore_auth /system/bin/keystore_auth
-    oneshot
-    user system
-    group root
-    disabled
+    chown system system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    restorecon /mnt/vendor/persist
+    mkdir /mnt/vendor/persist/mcRegistry 0771 system system
+    write /proc/bootprof "MOBICORE: Starting mcDriverDaemon"
+    
+on post-fs-data
+
+    mkdir /data/vendor/key_provisioning 0771 system system
+
+service gatekeeperd /system/bin/gatekeeperd /data/misc/gatekeeper
     seclabel u:r:recovery:s0
+
+service servicemanager /system/bin/servicemanager
+    disabled
+    user root
+    seclabel u:r:recovery:s0
+
+service hwservicemanager /system/bin/hwservicemanager
+    disabled
+    user root
+    onrestart setprop hwservicemanager.ready false
+    writepid /dev/cpuset/system-background/tasks
+    seclabel u:r:recovery:s0
+
+service vndservicemanager /system/bin/vndservicemanager /dev/vndbinder
+    user root
+    writepid /dev/cpuset/system-background/tasks
+    seclabel u:r:recovery:s0
+    
+
 
 service keystore /system/bin/keystore /tmp/misc/keystore
     user root
@@ -44,22 +86,7 @@ service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
     disabled
     seclabel u:r:recovery:s0
 
-service servicemanager /system/bin/servicemanager
-    disabled
-    user root
-    seclabel u:r:recovery:s0
 
-service hwservicemanager /system/bin/hwservicemanager
-    disabled
-    user root
-    onrestart setprop hwservicemanager.ready false
-    writepid /dev/cpuset/system-background/tasks
-    seclabel u:r:recovery:s0
-
-service vndservicemanager /system/bin/vndservicemanager /dev/vndbinder
-    user root
-    writepid /dev/cpuset/system-background/tasks
-    seclabel u:r:recovery:s0
 
 
 # Start Daemon (Registry directories should already be present)
@@ -145,6 +172,7 @@ on property:twrp.decrypt.done=true
     stop gatekeeper-1-0
     stop servicemanager
     stop hwservicemanager
+    stop gatekeeperd
 
 on post-fs-data
     mkdir /data/vendor_de 0770 system system
