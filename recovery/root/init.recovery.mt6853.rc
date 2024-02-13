@@ -1,7 +1,5 @@
 import /tee.rc
 on early-init
-    mkdir /vendor/firmware_mnt
-    symlink /vendor/firmware_mnt /firmware
     mkdir /mnt/vendor
     mkdir /mnt/vendor/persist
     chown root system /mnt/vendor/persist
@@ -15,13 +13,8 @@ on init
     mkdir /mnt/vendor/persist 0771 system system
     mkdir /mnt/system
     symlink /mnt/vendor/persist /vendor/persist
-    symlink /system/lib64/hw/libMcGatekeeper.so   /system/lib64/hw/gatekeeper.mt6853.so
-    symlink /system/lib64/hw/libMcGatekeeper.so   /system/lib64/hw/gatekeeper.k6853v1_64_6360.so
     start set_permissive
     start modelchange
-    start servicemanager
-    start hwservicemanager
-    start vndservicemanager
     
 on fs
 
@@ -35,39 +28,7 @@ on fs
     mount functionfs fastboot /dev/usb-ffs/fastboot rmode=0770,fmode=0660,uid=1000,gid=1000
 
 on post-fs
-
-    chown system system /mnt/vendor/persist
-    chmod 0771 /mnt/vendor/persist
-    restorecon /mnt/vendor/persist
-    mkdir /mnt/vendor/persist/mcRegistry 0771 system system
-    write /proc/bootprof "MOBICORE: Starting mcDriverDaemon"
-    
-on post-fs-data
-
-    mkdir /data/vendor/key_provisioning 0771 system system
-
-service gatekeeperd /system/bin/gatekeeperd /data/misc/gatekeeper
-    seclabel u:r:recovery:s0
-
-service servicemanager /system/bin/servicemanager
-    disabled
-    user root
-    seclabel u:r:recovery:s0
-
-service hwservicemanager /system/bin/hwservicemanager
-    disabled
-    user root
-    onrestart setprop hwservicemanager.ready false
-    writepid /dev/cpuset/tasks
-    seclabel u:r:recovery:s0
-
-service vndservicemanager /system/bin/vndservicemanager /dev/vndbinder
-    user root
-    writepid /dev/cpuset/tasks
-    seclabel u:r:recovery:s0
-    
-
-
+   
 service keystore /system/bin/keystore /tmp/misc/keystore
     user root
     group root drmrpc readproc log
@@ -156,28 +117,26 @@ on property:ro.crypto.state=unsupported
     stop mobicore
     stop keymaster-4-1
     stop gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager
 
 on property:ro.crypto.state=unencrypted
     stop mobicore
     stop keymaster-4-1
     stop gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager
 
 on property:twrp.decrypt.done=true
     stop mobicore
     stop keymaster-4-1
     stop gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager
-    stop gatekeeperd
 
 on post-fs-data
     mkdir /data/vendor_de 0770 system system
     mkdir /data/vendor_de/0 0770 system system
     mkdir /data/vendor_de/0/cryptoeng 0770 system system
+    chown system system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    restorecon /mnt/vendor/persist
+    mkdir /mnt/vendor/persist/mcRegistry 0771 system system
+    write /proc/bootprof "MOBICORE: Starting mcDriverDaemon"
 
 on boot
     start health-hal-2-1
