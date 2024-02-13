@@ -58,12 +58,12 @@ service hwservicemanager /system/bin/hwservicemanager
     disabled
     user root
     onrestart setprop hwservicemanager.ready false
-    writepid /dev/cpuset/system-background/tasks
+    writepid /dev/cpuset/tasks
     seclabel u:r:recovery:s0
 
 service vndservicemanager /system/bin/vndservicemanager /dev/vndbinder
     user root
-    writepid /dev/cpuset/system-background/tasks
+    writepid /dev/cpuset/tasks
     seclabel u:r:recovery:s0
     
 
