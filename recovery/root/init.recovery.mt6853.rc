@@ -1,18 +1,7 @@
 import /tee.rc
-on early-init
-    mkdir /mnt/vendor
-    mkdir /mnt/vendor/persist
-    chown root system /mnt/vendor/persist
-    chmod 0771 /mnt/vendor/persist
-    symlink /mnt/vendor/persist /persist
 
 on init
     export LD_LIBRARY_PATH /system/lib64:/system/hw:/vendor/lib64:/vendor/lib64/hw
-    mount ext4 /dev/block/platform/bootdevice/by-name/cust /oem ro barrier=1 discard
-    mount ext4 /dev/block/platform/bootdevice/by-name/persist /mnt/vendor/persist ro barrier=1 discard
-    mkdir /mnt/vendor/persist 0771 system system
-    mkdir /mnt/system
-    symlink /mnt/vendor/persist /vendor/persist
     start set_permissive
     start modelchange
     start hwservicemanager

@@ -1,10 +1,19 @@
 on init
     #create mountpoint for /mnt/vendor/persist partition
+    mkdir /mnt/vendor
+    mkdir /mnt/vendor/persist
+    chown root system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    symlink /mnt/vendor/persist /persist
+
     mkdir /mnt/vendor/persist 0771 system system
+    mkdir /mnt/system
+    symlink /mnt/vendor/persist /vendor/persist
 
 on post-fs
     chown system system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
+    mount ext4 /dev/block/platform/bootdevice/by-name/persist /mnt/vendor/persist ro barrier=1 discard
 
     # We restorecon /mnt/vendor/persist to set SEPolicy label.
     restorecon /mnt/vendor/persist
