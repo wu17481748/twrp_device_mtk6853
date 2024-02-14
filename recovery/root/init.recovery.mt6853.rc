@@ -18,6 +18,13 @@ on fs
     mount functionfs fastboot /dev/usb-ffs/fastboot rmode=0770,fmode=0660,uid=1000,gid=1000
 
 on post-fs
+
+service keystore_auth /system/bin/keystore_auth
+    oneshot
+    user system
+    group root
+    disabled
+    seclabel u:r:recovery:s0
    
 service keystore /system/bin/keystore /tmp/misc/keystore
     user root
