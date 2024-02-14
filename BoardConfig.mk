@@ -145,7 +145,7 @@ TW_EXCLUDE_APEX := true
 TW_OZIP_DECRYPT_KEY := 1C4C1EA3A12531AE491B21BB31613C11
 TW_INCLUDE_LOGICAL := my_product my_engineering my_company my_carrier my_region my_heytap my_stock my_preload my_manifest my_bigball
 
-TW_DEVICE_VERSION := OPPO-Realme-MTK6853-TWRP-安卓12
+TW_DEVICE_VERSION := OPPO-Realme-MTK6853-TWRP-A12
 
 # resetprop and magiskboot
 TW_INCLUDE_RESETPROP := true
