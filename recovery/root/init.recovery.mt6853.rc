@@ -1,13 +1,9 @@
 import /tee.rc
 
 on init
-    export LD_LIBRARY_PATH /system/lib64:/system/hw:/vendor/lib64:/vendor/lib64/hw
-    start set_permissive
-    start modelchange
-    start hwservicemanager
-    
-on fs
+    export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw
 
+on fs
     install_keyring
     mkdir /dev/usb-ffs 0775 shell shell
     mkdir /dev/usb-ffs/adb 0770 shell shell
@@ -25,7 +21,7 @@ service keystore_auth /system/bin/keystore_auth
     group root
     disabled
     seclabel u:r:recovery:s0
-   
+
 service keystore /system/bin/keystore /tmp/misc/keystore
     user root
     group root drmrpc readproc log
@@ -43,24 +39,6 @@ service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
     group root
     disabled
     seclabel u:r:recovery:s0
-
-on post-fs-data
-    mkdir /data/vendor_de 0770 system system
-    mkdir /data/vendor_de/0 0770 system system
-    mkdir /data/vendor_de/0/cryptoeng 0770 system system
-    chown system system /mnt/vendor/persist
-    chmod 0771 /mnt/vendor/persist
-    restorecon /mnt/vendor/persist
-    mkdir /mnt/vendor/persist/mcRegistry 0771 system system
-    write /proc/bootprof "MOBICORE: Starting mcDriverDaemon"
-
-service hwservicemanager /system/bin/hwservicemanager
-    disabled
-    user root
-    onrestart setprop hwservicemanager.ready false
-    writepid /dev/cpuset/tasks
-    seclabel u:r:recovery:s0
-
 
 # Start Daemon (Registry directories should already be present)
 service mobicore /system/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry \
@@ -103,23 +81,8 @@ service mobicore /system/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry 
     group root
     disabled
     seclabel u:r:recovery:s0
-    
 
-service modelchange /system/bin/modelchange.sh
-    user root
-    group root
-    disabled
-    oneshot
-    seclabel u:r:recovery:s0
-    
 
-service set_permissive /system/bin/set_permissive.sh
-    user root
-    group root
-    disabled
-    oneshot
-    seclabel u:r:recovery:s0
-           
 on property:hwservicemanager.ready=true
     start mobicore
     start keymaster-4-1
@@ -129,7 +92,6 @@ on property:ro.crypto.state=unsupported
     stop mobicore
     stop keymaster-4-1
     stop gatekeeper-1-0
-    stop hwservicemanager
 
 on property:ro.crypto.state=unencrypted
     stop mobicore
@@ -140,8 +102,11 @@ on property:twrp.decrypt.done=true
     stop mobicore
     stop keymaster-4-1
     stop gatekeeper-1-0
-    stop hwservicemanager
 
+on post-fs-data
+    mkdir /data/vendor_de 0770 system system
+    mkdir /data/vendor_de/0 0770 system system
+    mkdir /data/vendor_de/0/cryptoeng 0770 system system
 
 on boot
     start health-hal-2-1
