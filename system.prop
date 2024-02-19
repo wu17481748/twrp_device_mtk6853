@@ -1,4 +1,6 @@
 ro.adb.secure=0
 ro.crypto.volume.filenames_mode=aes-256-cts
 ro.hardware.gatekeeper=trustonic
-
+ro.commonsoft.ota=MTK6853
+ro.product.product.device=MTK6853
+ro.product.device=MTK6853
