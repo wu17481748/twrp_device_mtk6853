@@ -1,4 +1,4 @@
-name: 构建橙狐
+name: 构建-橙狐
 
 on:
   workflow_dispatch:
