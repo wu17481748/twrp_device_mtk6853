@@ -1,4 +1,4 @@
-name: Recovery Build-c11
+name: 构建橙狐
 
 on:
   workflow_dispatch:
@@ -14,15 +14,15 @@ on:
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/wu17481748/android_device_oppo_a72'
+        default: 'https://github.com/wu17481748/twrp_device_mtk6853'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
-        default: 'android11'
+        default: 'main'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
-        default: 'device/oppo/OP4E21'
+        default: 'device/MTK/MTK6853'
       COMMON_TREE_URL:
         description: 'COMMON_TREE_URL (if no common tree, leave blank)'
         required: false
@@ -32,11 +32,11 @@ on:
       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: true
-        default: 'OP4E21'
+        default: 'MTK6853'
       MAKEFILE_NAME:
         description: 'MAKEFILE_NAME'
         required: true
-        default: 'twrp_OP4E21'
+        default: 'twrp_MTK6853'
       BUILD_TARGET:
         description: 'BUILD_TARGET'
         required: true
